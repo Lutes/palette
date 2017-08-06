@@ -1,0 +1,19 @@
+{
+  "name": "coda-ui",
+  "version": "0.0.1",
+  "description": "UI for Coda",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lutes/coda-ui"
+  },
+  "author": "Daniel Lutes",
+  "contributors": [
+    "Daniel Lutes"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-sass": "^3.1.0",
+    "http-server": "^0.10.0"
+  }
+}

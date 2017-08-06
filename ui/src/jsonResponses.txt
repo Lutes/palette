@@ -1,0 +1,148 @@
+Home Page
+
+	Recient actions from friends
+	[
+		{
+			user-id: 121
+			username: "",
+			action: "album-review",
+			review-url: "coda.com/the-coda",
+			album-name: "shdf"
+			album-id: 313
+			rating: 8.9
+		},
+		{...},...
+	]
+
+	Hot albums this month:
+		Array of albums
+
+	Popular Lists:
+		Array of list
+
+	Popular Reviews:
+		Array of reviews
+
+Album Page
+	{
+		id: 192913,
+		title: "Illmatic",
+		album-art-url: "www.musicbrainz.com/arttt"
+		artist: "Nas",
+		label: "Def Jam",
+		aggregate-rating: 9.2
+		user-rating: null,
+		release-date: 2000-01-01,
+		duration: "59:23",
+		tracklist:[
+			{
+				title: "Song 1",
+				duration: "2:32",
+			},
+			{
+				title: "Song 2",
+				duration: "4:40",
+			}
+		]
+		most-popular-review:{
+			user: "mikee",
+			text: "good tunes!",
+			rating: 8.9
+		},
+		most-recent-review:{
+			user: "wakes",
+			text: "Gucci Mane",
+			rating: 1.9
+		}
+	}
+
+Indvidual List 
+	{
+		title: "Best Rap Albums of All-Time",
+		description: "The whats what",
+		ordered-list: true,
+		created-by: mikee,
+		created-by-id: 9432,
+		created-date: 2017-02-13,
+		list-type: album 
+		elements:[
+			{
+				index: 1,
+				id: 192913,
+				title: "Illmatic",
+				album-art-url: "www.musicbrainz.com/arttt"
+				artist: "Nas",
+				label: "Def Jam",
+				note: "The best of the best"
+			},
+			{
+				index: 2,
+				id: 92913,
+				title: "36 Chambers",
+				album-art-url: "www.musicbrainz.com/arttt/2"
+				artist: "Wu Tang Clan",
+				label: "Rox",
+				note: "Pre good"
+			}
+		]
+	}
+
+List Page[
+	{
+		most-recent-list:[
+			{
+				title: "Best Rap Albums of All-Time",
+				description: "The whats what",
+				ordered-list: true,
+				created-by: mikee,
+				created-by-id: 9432,
+				created-date: 2017-02-13,
+				list-type: album
+				//This should also return the top
+				//4 albums/artist from the list 
+				//depending on the list type.
+			},...
+		]
+	},...
+	]
+
+Artists
+	{
+		name: "",
+		origin: "",
+		bio: "",
+		years-active: "",
+
+		albums: [...],
+		top-songs: [...]
+
+	}
+
+profile 
+	{
+		name:"",
+		facebook-url: "", 
+		twitter-url: "",
+		profile-picture-url: "",
+		bio:"",
+		orgin:"",
+		link:"",
+		follower: "232",
+		following: "231",
+		top-five-albums: [...]
+		most-popular-review: {
+			id: 192913,
+			album-title: "Illmatic",
+			album-art-url: "www.musicbrainz.com/arttt"
+			text: "good tunes!",
+			rating: 8.9
+		}
+		most-recent-review: {
+			id: 192913,
+			album-title: "Illmatic",
+			album-art-url: "www.musicbrainz.com/arttt"
+			text: "good tunes!",
+			rating: 8.9
+		}
+		lists:[...]
+	}

@@ -1,0 +1,137 @@
+<html>
+   <head>
+	   	<!-- CSS -->
+		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+		<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="./assets/css/index.css">
+		<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link href="https://fonts.googleapis.com/css?family=Playfair+Display" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+		<!-- AngularJS -->
+    	<script src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+    	<!-- HTML to Canvas -->
+    	<script src="./assets/html2canvas.js"></script>
+    	<!-- File Saver -->
+    	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.3/FileSaver.js"></script>
+   </head>
+   
+   <body ng-app = "myApp">
+   		<h1> Image to Color Palette </h1>
+    	<div ng-controller = "myCtrl" class="container-fluid">
+	    	<div class="row">
+	  			<div class="col-md-4"></div>
+	  			<!-- Content here -->
+	  			<div class="col-md-4">
+					<!-- Palette -->
+					<div class="palette-state" ng-if="image || error">
+						<div class="palette-display">
+							<div class="palette">
+								<img ng-if="image" src="{{image}}">
+								<div class="color-block-section">
+			    					<div ng-repeat="color in colors" ng-if="!error" class="color-block" style="background-color: {{color}};" ng-class="{'no-margin': $last}"><i style="color: {{labelColor(color)}}">{{color}}</i></div>
+			    					<div class="error" ng-if="error">
+			    						<i> ERROR: {{error}}</i>
+			    					</div>
+			    				</div>
+		    				</div>
+		    				<button  class="btn btn-md get-image" ng-if="!error" ng-click="downloadPalette()">Download Palette</button>
+		    				<button  class="btn btn-md to-upload-state" ng-click="toUploadState()">Generate New Palette</button>
+		    			</div>
+	    			</div>
+					
+					<!-- Upload Prompt-->
+	  				<div class="upload-container" ng-class="{'exit': exit}">
+	  					<input  class="hidden-element" type = "file" file-model = "myFile"/>
+	  					<div class="fold-down"></div>
+	  					<div class="cover-up"></div>
+	  					<!-- <i class="fa fa-arrow-up up-arrow" aria-hidden="true"></i> -->
+	  					<div class="prompt">Click to Upload Image</div>
+	  					<div class="note">file must be less than 2MB</div>
+	    			</div>
+	  			</div>
+	  			<div class="col-md-4"></div>
+			</div>
+    	</div>
+
+      <script>
+         var myApp = angular.module('myApp', []);
+         
+         myApp.directive('fileModel', [function(){
+            return {
+               restrict: 'A',
+               link: function(scope, element, attrs) {
+               	 setTimeout(function () {
+	               	 var reader = new FileReader();
+	                    reader.onload = function (e) {
+	                        scope.image = e.target.result;
+	                        scope.exit = true;
+	                        scope.$apply();
+	                    };
+						element.on('change', function() {
+							scope.myFile = element[0].files[0];
+	                        reader.readAsDataURL(element[0].files[0]);
+	                    });
+	                },1100);
+
+                }
+            };
+        }]);
+      
+        myApp.controller('myCtrl', ['$scope', '$http', function($scope, $http){
+        	$scope.labelColor = function(color){
+        		var sum = 0;
+        		sum += parseInt(color[1]+color[2], 16);
+        		sum += parseInt(color[3]+color[4], 16);
+        		sum += parseInt(color[5]+color[6], 16);
+        		if(sum < 380)
+        			return "#bcbcbc";
+        		else
+        		return "#161616";
+        	};
+        	$scope.$watch('myFile',function (){
+				var file = $scope.myFile;
+				var uploadUrl = "http://localhost:5000/upload";
+				if($scope.myFile){
+					if(file.size > (2 * 1000 * 1000)){
+						$scope.error = "file is too big";
+					}
+					else{
+						var fd = new FormData();
+		            	fd.append('file', file);
+		            	$http.post(uploadUrl, fd, {
+		                  transformRequest: angular.identity,
+		                  headers: {'Content-Type': undefined}
+		               	})
+		            	.success(function(response){
+		            		$scope.colors = response;
+		            		$scope.error = $scope.colors.error;
+
+		            	})
+		            	.error(function(response){
+		            		console.log(response);
+		            	});
+		            }
+				}      		
+        	});
+        	$scope.downloadPalette = function(){
+				html2canvas(document.getElementsByClassName('palette'), {
+					onrendered: function(canvas) {
+						canvas.toBlob(function(blob) {
+   							 saveAs(blob, "palette.png");
+						});
+					}
+				});
+        	};
+        	$scope.toUploadState = function(){
+        		$scope.image = null;
+        		$scope.colors = null;
+        		$scope.exit = null;
+        		$scope.error = null;
+        	};
+
+         }]);
+		
+      </script>
+      
+   </body>
+</html>
